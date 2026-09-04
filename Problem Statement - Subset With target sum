@@ -1,0 +1,174 @@
+# Subset with Target Sum
+
+## Problem
+
+You are given an array of **positive integers** and a target value.
+
+Your task is to determine whether you can select some elements from the array such that their sum is exactly equal to the target.
+
+### Important Rules
+
+* Each element can be used **at most once**.
+* The selected elements do **not** need to be contiguous.
+* You can also choose an empty subset when `target = 0`.
+
+Return:
+
+* `true` → if a valid subset exists.
+* `false` → otherwise.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+1
+4 9
+3 8 4 5
+```
+
+### Output
+
+```text
+true
+```
+
+### Explanation
+
+The subset:
+
+```text
+{4, 5}
+```
+
+has sum:
+
+```text
+4 + 5 = 9
+```
+
+So the answer is `true`.
+
+---
+
+## Example 2
+
+### Input
+
+```text
+1
+3 4
+1 6 10
+```
+
+### Output
+
+```text
+false
+```
+
+### Explanation
+
+No subset of:
+
+```text
+[1, 6, 10]
+```
+
+has a sum equal to `4`.
+
+Therefore, the answer is `false`.
+
+---
+
+## Approach
+
+This is a classic **0/1 Knapsack Dynamic Programming** problem.
+
+Let:
+
+```text
+dp[s]
+```
+
+represent whether it is possible to create sum `s` using the elements processed so far.
+
+Initially:
+
+```text
+dp[0] = true
+```
+
+because a sum of `0` is always possible by choosing no elements.
+
+For every number `x` in the array, update the sums **from right to left**:
+
+```text
+for s = target down to x:
+    dp[s] = dp[s] OR dp[s - x]
+```
+
+We iterate backwards so that each array element is used **only once**.
+
+At the end:
+
+```text
+dp[target]
+```
+
+tells us whether a subset with the required sum exists.
+
+---
+
+## Example
+
+For:
+
+```text
+arr = [3, 8, 4, 5]
+target = 9
+```
+
+We can select:
+
+```text
+4 + 5 = 9
+```
+
+Therefore:
+
+```text
+dp[9] = true
+```
+
+---
+
+## Complexity
+
+Let `n` be the number of elements and `target` be the target sum.
+
+* **Time:** `O(n × target)`
+* **Space:** `O(target)`
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ n ≤ 100`
+* `1 ≤ arr[i] ≤ 100`
+* `0 ≤ target ≤ 5000`
+
+---
+
+## Key Idea
+
+> **For every number, decide whether to include it or skip it. Use DP to keep track of which sums are possible.**
+
+```text
+dp[s] = dp[s] OR dp[s - current]
+```
+
+Because each element can be used only once, iterate the target sums **backwards**.
