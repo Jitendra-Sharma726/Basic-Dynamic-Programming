@@ -1,0 +1,19 @@
+class Solution {
+public:
+    long long calculateWaysToClimb(int totalSteps) {
+        // DP array of size totalSteps + 1
+        vector<long long> dp(totalSteps + 1);
+
+        // Base cases
+        dp[1] = 1;
+        if (totalSteps >= 2)
+            dp[2] = 2;
+
+        // Fill the DP table
+        for (int i = 3; i <= totalSteps; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+
+        return dp[totalSteps];
+    }
+};
