@@ -1,0 +1,84 @@
+import sys
+
+def solve():
+    # Read all inputs from standard input efficiently
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    iterator = iter(input_data)
+    
+    # Read number of test cases
+    t = int(next(iterator))
+    MOD = 10**9 + 7
+    
+    out = []
+    for _ in range(t):
+        n = int(next(iterator))
+        k = int(next(iterator))
+        
+        arr = []
+        for _ in range(n):
+            arr.append(int(next(iterator)))
+            
+        # dp[s] stores the number of subsets that sum up to s
+        dp = [0] * (k + 1)
+        
+        # Base case: There is exactly 1 way to form a sum of 0 (the empty set)import sys
+
+def solve():
+    # Read all inputs from standard input efficiently
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    iterator = iter(input_data)
+    
+    # Read number of test cases
+    t = int(next(iterator))
+    MOD = 10**9 + 7
+    
+    out = []
+    for _ in range(t):
+        n = int(next(iterator))
+        k = int(next(iterator))
+        
+        arr = []
+        for _ in range(n):
+            arr.append(int(next(iterator)))
+            
+        # dp[s] stores the number of subsets that sum up to s
+        dp = [0] * (k + 1)
+        
+        # Base case: There is exactly 1 way to form a sum of 0 (the empty set)
+        dp[0] = 1
+        
+        # Process each element in the array
+        for x in arr:
+            # Loop backwards from K down to x to ensure each element is used only once
+            for s in range(k, x - 1, -1):
+                dp[s] = (dp[s] + dp[s - x]) % MOD
+                
+        out.append(str(dp[k]))
+        
+    # Print results for all test cases separated by newlines
+    sys.stdout.write('\n'.join(out) + '\n')
+
+if __name__ == '__main__':
+    solve()
+
+        dp[0] = 1
+        
+        # Process each element in the array
+        for x in arr:
+            # Loop backwards from K down to x to ensure each element is used only once
+            for s in range(k, x - 1, -1):
+                dp[s] = (dp[s] + dp[s - x]) % MOD
+                
+        out.append(str(dp[k]))
+        
+    # Print results for all test cases separated by newlines
+    sys.stdout.write('\n'.join(out) + '\n')
+
+if __name__ == '__main__':
+    solve()
