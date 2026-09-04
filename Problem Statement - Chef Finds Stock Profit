@@ -1,0 +1,184 @@
+# Chef Finds Stock Profit - 1
+
+## Problem
+
+You are given the stock price for each day.
+
+Chef can perform **one transaction**:
+
+1. Buy the stock on one day.
+2. Sell it on a later day.
+
+The goal is to find the **maximum possible profit**.
+
+If no profit can be made, return `0`.
+
+### Profit Formula
+
+```text
+profit = selling price - buying price
+```
+
+The selling day must always be **after** the buying day.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+3
+4
+5 5 5 5
+
+7
+1 2 3 4 5 6 7
+
+8
+10 7 5 8 11 9 6 15
+```
+
+### Output
+
+```text
+0
+6
+10
+```
+
+---
+
+## Explanation
+
+### Test Case 1
+
+```text
+Prices: 5 5 5 5
+```
+
+There is no price increase, so no profit is possible.
+
+```text
+Maximum Profit = 0
+```
+
+### Test Case 2
+
+```text
+Prices: 1 2 3 4 5 6 7
+```
+
+Buy at `1` and sell at `7`.
+
+```text
+Profit = 7 - 1 = 6
+```
+
+### Test Case 3
+
+```text
+Prices: 10 7 5 8 11 9 6 15
+```
+
+The best transaction is:
+
+```text
+Buy  → 5
+Sell → 15
+```
+
+Therefore:
+
+```text
+Profit = 15 - 5 = 10
+```
+
+---
+
+## Approach
+
+This can be solved efficiently using a **single pass** through the array.
+
+Keep track of:
+
+* `minPrice` → lowest price seen so far
+* `maxProfit` → maximum profit found so far
+
+For every price:
+
+1. Update the minimum price.
+2. Calculate the profit if we sell today.
+3. Update the maximum profit.
+
+### Pseudocode
+
+```text
+minPrice = infinity
+maxProfit = 0
+
+for price in stockPrices:
+
+    minPrice = min(minPrice, price)
+
+    profit = price - minPrice
+
+    maxProfit = max(maxProfit, profit)
+
+return maxProfit
+```
+
+---
+
+## Example Walkthrough
+
+For:
+
+```text
+[7, 1, 5, 3, 6, 4]
+```
+
+| Price | Minimum Price | Profit | Maximum Profit |
+| ----: | ------------: | -----: | -------------: |
+|     7 |             7 |      0 |              0 |
+|     1 |             1 |      0 |              0 |
+|     5 |             1 |      4 |              4 |
+|     3 |             1 |      2 |              4 |
+|     6 |             1 |      5 |              5 |
+|     4 |             1 |      3 |              5 |
+
+Answer:
+
+```text
+5
+```
+
+Buy at `1` and sell at `6`.
+
+---
+
+## Complexity
+
+* **Time:** `O(N)` per test case
+* **Space:** `O(1)`
+
+Since the sum of `N` across all test cases is at most `10⁵`, this approach is efficient.
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10⁵`
+* `1 ≤ N ≤ 10⁵`
+* `0 ≤ stockPrices[i] ≤ 10⁴`
+* Sum of `N` across all test cases ≤ `10⁵`
+
+---
+
+## Key Idea
+
+> **Keep the lowest buying price seen so far and calculate the best profit by selling at each day's price.**
+
+```text
+Best Profit = max(Current Price - Minimum Price Seen So Far)
+```
