@@ -1,0 +1,148 @@
+# Chef Finds Minimum Path
+
+Chef has a grid containing **non-negative numbers**.
+
+He wants to travel from the **top-left corner** to the **bottom-right corner** while getting the **minimum possible sum** of the values on his path.
+
+Chef can only move:
+
+* ➡️ **Right**
+* ⬇️ **Down**
+
+Find the minimum path sum.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+2
+2
+1 2 3
+4 5 6
+3
+10 1 10
+1 10 1
+10 1 10
+```
+
+### Output
+
+```text
+12
+32
+```
+
+### Explanation
+
+For the first grid, the minimum path is:
+
+```text
+1 → 2 → 3 → 6
+```
+
+Sum:
+
+```text
+1 + 2 + 3 + 6 = 12
+```
+
+For the second grid, one minimum path is:
+
+```text
+10 → 1 → 10 → 1 → 10
+```
+
+Sum:
+
+```text
+32
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+2
+2
+0 0
+0 0
+3
+7 2 3
+1 0 4
+2 1 0
+```
+
+### Output
+
+```text
+0
+9
+```
+
+---
+
+## Approach
+
+Use **Dynamic Programming**.
+
+Define:
+
+```text
+dp[i][j] = minimum cost to reach cell (i, j)
+```
+
+To reach `(i, j)`, Chef can come from:
+
+* **Top:** `(i-1, j)`
+* **Left:** `(i, j-1)`
+
+Therefore:
+
+```text
+dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
+```
+
+### Base Case
+
+For the starting cell:
+
+```text
+dp[0][0] = grid[0][0]
+```
+
+The first row can only be reached from the **left**, and the first column can only be reached from **above**.
+
+The final answer is:
+
+```text
+dp[last_row][last_column]
+```
+
+---
+
+## Complexity
+
+* **Time:** `O(R × C)`
+* **Space:** `O(R × C)`
+* Space can be optimized to **O(C)**.
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ rowCount ≤ 200`
+* `0 ≤ grid[i][j] ≤ 200`
+* The grid can be **rectangular or square**.
+
+## Key Idea
+
+> At every cell, choose the cheaper path from the **top** or **left**, then add the current cell's value.
+
+This is a classic **Grid Dynamic Programming** problem.
