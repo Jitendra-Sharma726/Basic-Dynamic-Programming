@@ -1,0 +1,73 @@
+# Chef Robs House II
+
+Chef wants to rob houses arranged in a **circle**. Each house contains some money.
+
+The security system connects adjacent houses, so **Chef cannot rob two neighboring houses** on the same night.
+
+Your task is to find the **maximum amount of money Chef can rob** without triggering the alarm.
+
+## Example
+
+### Input
+
+```text
+3
+[2, 3, 2]
+[1, 2, 3, 1]
+[1, 2, 3]
+```
+
+### Output
+
+```text
+3
+4
+3
+```
+
+### Explanation
+
+* `[2, 3, 2]` → Rob house `2` → **3**
+* `[1, 2, 3, 1]` → Rob houses `2` and `4` → `2 + 1 = 3`, or houses `1` and `3` → `1 + 3 = 4` → **4**
+* `[1, 2, 3]` → First and last houses are adjacent, so rob house `3` → **3**
+
+## Approach
+
+Because the houses form a circle, the **first and last houses are also adjacent**.
+
+So, there are two cases:
+
+1. **Exclude the first house** → find the best result from houses `2...N`.
+2. **Exclude the last house** → find the best result from houses `1...N-1`.
+
+The answer is the maximum of these two cases.
+
+For a normal linear set of houses, use:
+
+```text
+dp[i] = max(dp[i-1], dp[i-2] + money[i])
+```
+
+where:
+
+* `dp[i-1]` → skip the current house
+* `dp[i-2] + money[i]` → rob the current house
+
+## Complexity
+
+* **Time:** `O(N)`
+* **Space:** `O(N)`
+  Can be optimized to **O(1)**.
+
+## Constraints
+
+* `1 ≤ N ≤ 100`
+* `0 ≤ houseMoneyList[i] ≤ 1000`
+
+## Function
+
+```text
+calculateMaxRobAmount(houseMoneyList)
+```
+
+Returns the maximum amount of money that can be robbed without robbing two adjacent houses.
