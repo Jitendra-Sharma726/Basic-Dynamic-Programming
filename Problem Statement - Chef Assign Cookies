@@ -1,0 +1,159 @@
+# Chef Assign Cookies
+
+## Problem
+
+You are given:
+
+* `childrenGreedFactors` — the minimum cookie size each child needs to be happy.
+* `cookieSizes` — the sizes of available cookies.
+
+Each child can receive **at most one cookie**, and a child is happy if:
+
+```text
+cookie size >= child's greed factor
+```
+
+Your task is to find the **maximum number of children** that can be made happy.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+2
+[1, 2, 2, 3]
+[1, 1]
+
+[1, 2, 2, 3, 4]
+[1, 2, 3]
+```
+
+### Output
+
+```text
+1
+3
+```
+
+### Explanation
+
+For the first test case:
+
+```text
+Children: [1, 2, 2, 3]
+Cookies:  [1, 1]
+```
+
+Only one child with greed factor `1` can receive a cookie.
+
+Answer:
+
+```text
+1
+```
+
+For the second test case:
+
+```text
+Children: [1, 2, 3]
+Cookies:  [1, 2, 2, 3, 4]
+```
+
+We can assign:
+
+```text
+Child 1 → Cookie 1
+Child 2 → Cookie 2
+Child 3 → Cookie 3
+```
+
+So, the maximum number of happy children is:
+
+```text
+3
+```
+
+---
+
+## Approach
+
+This problem can be solved using a **Greedy + Sorting** approach.
+
+### Step 1: Sort both arrays
+
+Sort:
+
+```text
+childrenGreedFactors
+cookieSizes
+```
+
+in ascending order.
+
+### Step 2: Use two pointers
+
+Use:
+
+* `i` → current child
+* `j` → current cookie
+
+For every cookie:
+
+* If the cookie is large enough for the current child, assign it and move to the next child.
+* Otherwise, the cookie is too small, so try the next larger cookie.
+
+### Pseudocode
+
+```text
+sort(children)
+sort(cookies)
+
+i = 0
+count = 0
+
+for each cookie:
+    if i < number of children and cookie >= children[i]:
+        count++
+        i++
+
+return count
+```
+
+---
+
+## Why This Works
+
+We always try to give the **smallest suitable cookie** to the child with the **smallest greed factor**.
+
+This saves larger cookies for children who need them, allowing us to satisfy the maximum number of children.
+
+---
+
+## Complexity
+
+Let:
+
+* `n` = number of children
+
+* `m` = number of cookies
+
+* **Time:** `O(n log n + m log m)`
+
+* **Space:** `O(1)` extra space, excluding the sorting implementation.
+
+---
+
+## Constraints
+
+* `1 ≤ number of children ≤ 3 × 10⁴`
+* `0 ≤ number of cookies ≤ 3 × 10⁴`
+* `1 ≤ childrenGreedFactors[i] ≤ 2³¹ - 1`
+* `1 ≤ cookieSizes[j] ≤ 2³¹ - 1`
+
+---
+
+## Key Idea
+
+> **Sort both arrays and always give the smallest cookie that can satisfy the least-demanding remaining child.**
