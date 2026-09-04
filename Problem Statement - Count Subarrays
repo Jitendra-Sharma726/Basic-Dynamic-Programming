@@ -1,0 +1,58 @@
+# Count Subarrays
+
+Given an array of integers, count the number of contiguous subarrays
+that are non-decreasing.
+
+A subarray is non-decreasing if:
+
+A[i] <= A[i+1] <= A[i+2] <= ...
+
+## Example
+
+Input:
+[1, 4, 2, 3]
+
+Valid subarrays:
+
+[1]
+[1, 4]
+[4]
+[2]
+[2, 3]
+[3]
+
+Output:
+6
+
+## Approach
+
+Use Dynamic Programming.
+
+Let:
+
+dp[i] = number of non-decreasing subarrays ending at index i.
+
+If:
+
+A[i] >= A[i-1]
+
+then:
+
+dp[i] = dp[i-1] + 1
+
+Otherwise:
+
+dp[i] = 1
+
+The final answer is the sum of all dp[i].
+
+## Complexity
+
+Time: O(N)
+Space: O(N)
+
+## Constraints
+
+- 1 <= T <= 5
+- 1 <= N <= 100000
+- 1 <= A[i] <= 10^9
