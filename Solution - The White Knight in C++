@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+const int MAX_SIZE = 1001; // Define the maximum size of the grid
+
+// Global variables for the grid and memoization table
+char grid[MAX_SIZE][MAX_SIZE];
+int dp[MAX_SIZE][MAX_SIZE];
+int n; // Size of the grid
+
+// Function to solve the problem using memoization
+int solve(int i, int j) {
+    // Base case: If the position is out of bounds, return 0
+    if (i < 1 || j < 1 || i > n || j > n) {
+        return 0;
+    }
+    // If the solution is already computed, return the stored value
+    if (dp[i][j] != -1) {
+        return dp[i][j];
+    }
+    // Calculate the maximum number of 'P' cells that can be collected
+    // by moving the knight in different directions
+    dp[i][j] = (grid[i][j] == 'P' ? 1 : 0) + max({
+        solve(i - 1, j + 2), // Move up-left
+        solve(i + 1, j + 2), // Move down-left
+        solve(i - 2, j + 1), // Move up-right
+        solve(i + 2, j + 1)  // Move down-right
+    });
+
+    return dp[i][j];
+}
+
+int main() {
+    int t; // Number of test cases
+    cin >> t;
+
+    // Process each test case
+    while (t--) {
+        cin >> n; // Read the size of the grid
+
+        int start_i = -1, start_j = -1; // Coordinates of the knight
+
+        // Read the grid and initialize the dp array
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                cin >> grid[i][j]; // Input each cell
+                dp[i][j] = -1; // Initialize dp table with -1 (unvisited)
+                // Find the starting position of the knight ('K')
+                if (grid[i][j] == 'K') {
+                    start_i = i;
+                    start_j = j;
+                }
+            }
+        }
+
+        // Call solve from the knight's starting position and output the result
+        cout << solve(start_i, start_j) << endl;
+    }
+
+    return 0;
+}
