@@ -1,0 +1,106 @@
+# IPL
+
+**Zonal Computing Olympiad 2014**
+
+Nikhil is the captain of an IPL team. Each match has a fixed fee that a player earns if they play that match.
+
+However, the team follows a rotation rule:
+
+> A player cannot play **3 consecutive matches**.
+
+Nikhil wants to choose which matches he will play so that he follows this rule and **maximizes his total earnings**.
+
+## Example 1
+
+### Input
+
+```text
+5
+10 3 5 7 3
+```
+
+### Output
+
+```text
+23
+```
+
+### Explanation
+
+Nikhil can play matches:
+
+```text
+10 + 3 + 7 + 3 = 23
+```
+
+He never plays 3 consecutive matches.
+
+---
+
+## Example 2
+
+### Input
+
+```text
+8
+3 2 3 2 3 5 1 3
+```
+
+### Output
+
+```text
+17
+```
+
+### Explanation
+
+One optimal schedule is:
+
+```text
+3 + 3 + 3 + 5 + 3 = 17
+```
+
+Again, Nikhil never plays 3 matches in a row.
+
+---
+
+## Approach
+
+Use **Dynamic Programming**.
+
+For each match, we have three possibilities based on how many consecutive matches Nikhil has played:
+
+* `0` → Skip the current match
+* `1` → Play the current match after skipping the previous match
+* `2` → Play the current match after playing only one previous match
+
+We can keep track of the best earnings for these three states.
+
+The important rule is:
+
+```text
+Never allow 3 consecutive matches.
+```
+
+An alternative simple recurrence is to consider the last **3 matches** and choose the best valid combination.
+
+---
+
+## Complexity
+
+* **Time:** `O(N)`
+* **Space:** `O(N)`
+* Can be optimized to **O(1)** extra space.
+
+---
+
+## Constraints
+
+* `1 ≤ N ≤ 2 × 10⁵`
+* `0 ≤ fee[i] ≤ 10⁴`
+
+## Key Idea
+
+> Maximize the total match fees while making sure Nikhil never plays **3 consecutive matches**.
+
+This is a classic **1D Dynamic Programming** problem.
