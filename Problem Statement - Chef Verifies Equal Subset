@@ -1,0 +1,228 @@
+# Chef Verifies Equal Subset Sum
+
+## Problem
+
+Given an array of **positive integers**, determine whether it can be divided into **two subsets with equal sum**.
+
+Each element can be used **at most once**.
+
+Return:
+
+* `true` → if an equal partition is possible
+* `false` → otherwise
+
+---
+
+## Example 1
+
+### Input
+
+```text
+3
+4
+2 2 3 5
+5
+1 2 3 4 5
+6
+1 1 1 1 1 1
+```
+
+### Output
+
+```text
+false
+false
+true
+```
+
+### Explanation
+
+**Test Case 1:**
+
+```text
+Array = [2, 2, 3, 5]
+Total = 12
+Target = 12 / 2 = 6
+```
+
+No subset has sum `6`.
+
+So:
+
+```text
+false
+```
+
+**Test Case 2:**
+
+```text
+Array = [1, 2, 3, 4, 5]
+Total = 15
+```
+
+The total sum is odd, so it cannot be split equally.
+
+```text
+false
+```
+
+**Test Case 3:**
+
+```text
+Array = [1, 1, 1, 1, 1, 1]
+Total = 6
+Target = 3
+```
+
+We can divide it as:
+
+```text
+[1, 1, 1] → 3
+[1, 1, 1] → 3
+```
+
+Therefore:
+
+```text
+true
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+2
+8
+1 1 1 1 1 1 1 7
+5
+2 4 6 8 10
+```
+
+### Output
+
+```text
+true
+false
+```
+
+### Explanation
+
+For the first test case:
+
+```text
+Total = 14
+Target = 7
+```
+
+We can divide the array into:
+
+```text
+[7] → 7
+[1, 1, 1, 1, 1, 1, 1] → 7
+```
+
+So the answer is `true`.
+
+For the second test case:
+
+```text
+Total = 30
+Target = 15
+```
+
+No subset has sum `15`.
+
+So the answer is `false`.
+
+---
+
+## Approach
+
+This problem can be reduced to the **Subset Sum** problem.
+
+### Step 1: Find the total sum
+
+```text
+total = sum of all elements
+```
+
+If `total` is odd, equal partition is impossible.
+
+```text
+if total % 2 != 0
+    return false
+```
+
+### Step 2: Find the target
+
+Each subset must have:
+
+```text
+target = total / 2
+```
+
+Now the problem becomes:
+
+> Can we find a subset whose sum is exactly `target`?
+
+We can solve this using **0/1 Dynamic Programming**.
+
+---
+
+## DP Idea
+
+Let:
+
+```text
+dp[s] = true
+```
+
+if we can form sum `s` using the elements processed so far.
+
+Initially:
+
+```text
+dp[0] = true
+```
+
+For every number `x`, update sums from `target` down to `x`:
+
+```text
+dp[s] = dp[s] || dp[s - x]
+```
+
+The backward loop ensures that each element is used **only once**.
+
+Finally:
+
+```text
+dp[target]
+```
+
+is the answer.
+
+---
+
+## Complexity
+
+Let `N` be the number of elements and `S` be the total sum.
+
+* **Time:** `O(N × S)`
+* **Space:** `O(S)`
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ N ≤ 200`
+* `1 ≤ numbers[i] ≤ 100`
+
+---
+
+## Key Idea
+
+> If the total sum is even, check whether a subset can make exactly half of the total sum using **0/1 Subset Sum DP**.
