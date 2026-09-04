@@ -1,0 +1,104 @@
+# SUPW
+
+**Zonal Computing Olympiad 2014**
+
+Nikhil has SUPW duties for `N` days. Each day has a certain amount of work, represented by the number of minutes required.
+
+The school has one important rule:
+
+> A student cannot go **3 consecutive days without doing SUPW**.
+
+Nikhil wants to choose the days when he will do SUPW so that he follows this rule while spending the **minimum possible total time**.
+
+## Example 1
+
+### Input
+
+```text
+10
+3 2 1 1 2 3 1 3 2 1
+```
+
+### Output
+
+```text
+4
+```
+
+### Explanation
+
+One optimal assignment is:
+
+```text
+1 + 1 + 1 + 1 = 4
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+8
+3 2 3 2 3 5 1 3
+```
+
+### Output
+
+```text
+5
+```
+
+### Explanation
+
+One optimal assignment is:
+
+```text
+2 + 2 + 1 = 5
+```
+
+---
+
+## Approach
+
+Use **Dynamic Programming**.
+
+For each day, we need to make sure Nikhil does not skip **3 days in a row**.
+
+Define:
+
+```text
+dp[i] = minimum time needed for the first i days
+```
+
+To satisfy the rule, Nikhil must perform SUPW at least once in every group of 3 consecutive days.
+
+The minimum cost for day `i` can be obtained by considering the previous few days:
+
+```text
+dp[i] = min(
+    dp[i-1] + a[i],
+    dp[i-2] + a[i],
+    dp[i-3] + a[i]
+)
+```
+
+The exact implementation can be optimized to keep only the previous three DP values.
+
+## Complexity
+
+* **Time:** `O(N)`
+* **Space:** `O(N)`
+* Can be optimized to **O(1)** extra space.
+
+## Constraints
+
+* `1 ≤ N ≤ 2 × 10⁵`
+* `0 ≤ a[i] ≤ 10⁴`
+
+## Key Idea
+
+> Choose SUPW days so that there are never **3 consecutive skipped days**, while minimizing the total time spent.
+
+This is a classic **1D Dynamic Programming** problem.
