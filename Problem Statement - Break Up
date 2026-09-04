@@ -1,0 +1,124 @@
+# Break Up
+
+**Zonal Computing Olympiad 2015**
+
+A sequence is called a **palindrome** if it reads the same from left to right and right to left.
+
+For example:
+
+```text
+23 45 23
+23 45 56 23 23 56 45 23
+```
+
+are palindromes, while:
+
+```text
+23 45 56
+23 32
+```
+
+are not.
+
+Given a sequence of integers, divide it into **consecutive parts** such that every part is a palindrome.
+
+Find the **minimum number of palindrome parts** needed.
+
+---
+
+## Example
+
+### Input
+
+```text
+5
+34 45 34 56 34
+```
+
+### Output
+
+```text
+3
+```
+
+### Explanation
+
+The sequence can be divided as:
+
+```text
+34 45 34 | 56 | 34
+```
+
+Each part is a palindrome:
+
+* `34 45 34` → palindrome
+* `56` → palindrome
+* `34` → palindrome
+
+So the minimum number of parts is:
+
+```text
+3
+```
+
+---
+
+## Approach
+
+Use **Dynamic Programming**.
+
+First, determine whether every subarray `i...j` is a palindrome.
+
+Define:
+
+```text
+isPalindrome[i][j] = true
+```
+
+if the sequence from index `i` to `j` is a palindrome.
+
+A sequence is a palindrome when:
+
+```text
+a[i] == a[j]
+```
+
+and the inner part is also a palindrome.
+
+Then define:
+
+```text
+dp[i] = minimum number of palindrome parts needed for the first i elements
+```
+
+For every possible palindrome ending at position `i`:
+
+```text
+dp[i] = min(dp[i], dp[j] + 1)
+```
+
+where `j...i` is a palindrome.
+
+### Key Idea
+
+> Try every possible palindrome ending at each position and choose the partition with the **fewest parts**.
+
+---
+
+## Complexity
+
+* **Time:** `O(N²)`
+* **Space:** `O(N²)`
+
+---
+
+## Constraints
+
+* `1 ≤ N ≤ 300`
+* Each integer is between `1` and `10⁸`.
+
+## Key Concept
+
+**Palindrome Partitioning + Dynamic Programming**
+
+The goal is not to find all possible partitions, but to find the one with the **minimum number of palindrome parts**.
