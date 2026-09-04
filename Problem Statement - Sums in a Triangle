@@ -1,0 +1,51 @@
+# Sums in a Triangle
+
+Given a triangle of numbers, find the maximum sum from the top
+to the bottom.
+
+From each number, you can move to:
+
+- The number directly below
+- The number below and one position to the right
+
+## Example
+
+Triangle:
+
+    1
+   2 1
+  1 2 3
+
+Maximum path:
+
+1 → 2 → 2
+
+Maximum Sum:
+
+5
+
+## Approach
+
+Use Dynamic Programming from the bottom of the triangle.
+
+For each element:
+
+dp[j] = triangle[i][j] + max(dp[j], dp[j+1])
+
+Choose the larger value from the two possible positions
+in the next row.
+
+After processing all rows, dp[0] contains the maximum path sum.
+
+## Complexity
+
+Time: O(N²)
+Space: O(N²)
+
+Space can be optimized to O(N).
+
+## Constraints
+
+- 1 <= T <= 1000
+- 1 <= N < 100
+- 0 <= A[i][j] < 100
