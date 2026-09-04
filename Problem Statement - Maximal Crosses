@@ -1,0 +1,210 @@
+# Maximal Crosses
+
+## Problem
+
+You are given an `n × n` matrix containing:
+
+* `X` → a cell containing a cross
+* `.` → an empty cell
+
+For every cell `(i, j)`, find the **maximum number of continuous `X` cells** in a straight line passing through that cell.
+
+We consider **4 directions**:
+
+* Horizontal → left ↔ right
+* Vertical → up ↔ down
+* Diagonal ↘ → top-left ↔ bottom-right
+* Diagonal ↙ → top-right ↔ bottom-left
+
+If the cell itself is `.`:
+
+```text
+B[i][j] = 0
+```
+
+Otherwise, `B[i][j]` is the largest continuous line of `X` passing through that cell.
+
+---
+
+## Example
+
+### Input
+
+```text
+10
+..X....XX.
+XX.X..XX.X
+.....XX..X
+.XXX..X.X.
+.....X..XX
+....X....X
+X.X....XX.
+.X...X.X.X
+X.X..X....
+..XXXXX.XX
+```
+
+### Output
+
+```text
+0 0 2 0 0 0 0 3 3 0
+2 2 0 2 0 0 3 3 0 2
+0 0 0 0 0 3 3 0 0 2
+0 3 3 3 0 0 3 0 2 0
+0 0 0 0 0 3 0 0 2 2
+0 0 0 0 3 0 0 0 0 3
+4 0 3 0 0 0 0 2 3 0
+0 4 0 0 0 3 0 3 0 2
+3 0 4 0 0 3 0 0 0 0
+0 0 5 5 5 5 5 0 2 2
+```
+
+---
+
+## Explanation
+
+### Cell `(0,0)`
+
+The cell contains `.`:
+
+```text
+B[0][0] = 0
+```
+
+### Cell `(0,2)`
+
+There are continuous crosses along a diagonal through this cell.
+
+The maximum length is:
+
+```text
+B[0][2] = 2
+```
+
+### Cell `(0,8)`
+
+The longest continuous line through this cell has length `3`.
+
+```text
+B[0][8] = 3
+```
+
+### Cell `(9,2)`
+
+There are `5` continuous crosses horizontally:
+
+```text
+XXXXX
+```
+
+Therefore:
+
+```text
+B[9][2] = 5
+```
+
+---
+
+## Approach
+
+This problem can be solved using **Dynamic Programming**.
+
+For every `X` cell, calculate the length of continuous crosses in all four directions.
+
+### 1. Horizontal
+
+Calculate:
+
+```text
+left[i][j]  → consecutive X ending at (i,j)
+right[i][j] → consecutive X starting at (i,j)
+```
+
+Then:
+
+```text
+horizontal = left[i][j] + right[i][j] - 1
+```
+
+### 2. Vertical
+
+Similarly calculate:
+
+```text
+up[i][j]
+down[i][j]
+```
+
+Then:
+
+```text
+vertical = up[i][j] + down[i][j] - 1
+```
+
+### 3. Diagonal ↘
+
+Calculate consecutive crosses in:
+
+```text
+top-left → bottom-right
+```
+
+Then combine the two directions.
+
+### 4. Diagonal ↙
+
+Calculate consecutive crosses in:
+
+```text
+top-right → bottom-left
+```
+
+Again, combine both directions.
+
+Finally:
+
+```text
+B[i][j] = max(
+    horizontal,
+    vertical,
+    diagonal1,
+    diagonal2
+)
+```
+
+For an empty cell:
+
+```text
+B[i][j] = 0
+```
+
+---
+
+## DP Idea
+
+Instead of checking every direction from every cell repeatedly, store the lengths of continuous crosses calculated from neighboring cells.
+
+For example:
+
+```text
+left[i][j] = left[i][j-1] + 1
+```
+
+if both cells contain `X`.
+
+This allows every cell to be processed in constant time after the DP arrays are built.
+
+---
+
+## Complexity
+
+There are `n²` cells and only a constant number of directions.
+
+* **Time:** `O(n²)`
+* **Space:** `O(n²)`
+
+---
+
+## Key Idea
+
+> **For every `X`, calculate the continuous line length in the four directions and take the maximum. Use DP to avoid repeatedly scanning the same cells.**
