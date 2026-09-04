@@ -1,0 +1,215 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+#define int ll
+#define now(x) cout<<#x<<" : "<<x<<'\n';
+#define fv(v)  cout<<#v<<" : "; for(auto it:v) cout<<it<<" "; cout<<'\n';
+#define pm(m)  cout<<#m<<" : "; for(auto it:m) cout<<it.first<<" "<<it.second<<'\n';
+
+const int modd = 1000000007;
+// const int modd = 998244353;
+
+void solve()
+{
+    int n; 
+    cin >> n;
+    char mat[n][n];
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; j++) {
+            cin >> mat[i][j];
+        }
+    }
+
+    int horizontalPrefix[n][n];
+    int horizontalSuffix[n][n];
+    memset(horizontalPrefix, 0, sizeof(horizontalPrefix));
+    memset(horizontalSuffix, 0, sizeof(horizontalSuffix));
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; j++) {
+            if (mat[i][j] == '.') {
+                horizontalPrefix[i][j] = 0;
+            }
+            else
+                horizontalPrefix[i][j] = (j >= 1 ? horizontalPrefix[i][j - 1] : 0) + (mat[i][j] == 'X');
+        }
+        int mx = 0;
+        for (int j = n - 1; j >= 0; j--) {
+            if (mat[i][j] == '.') {
+                horizontalSuffix[i][j] = 0;
+                mx = 0;
+            }
+            else {
+                horizontalSuffix[i][j] = mx;
+                mx++;
+            }
+        }
+    }
+
+    int verticalPrefix[n][n];
+    int verticalSuffix[n][n];
+    memset(verticalPrefix, 0, sizeof(verticalPrefix));
+    memset(verticalSuffix, 0, sizeof(verticalSuffix));
+
+    for (int j = 0; j < n; j++) {
+        for (int i = 0; i < n; i++) {
+            if (mat[i][j] == '.') {
+                verticalPrefix[i][j] = 0;
+            }
+            else {
+                verticalPrefix[i][j] = (i >= 1 ? verticalPrefix[i - 1][j] : 0) + 1;
+            }
+        }
+        int mx = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            if (mat[i][j] == '.') {
+                mx = 0;
+                verticalSuffix[i][j] = 0;
+            }
+            else {
+                verticalSuffix[i][j] = mx;
+                mx++;
+            }
+        }
+    }
+
+    int rightDiagonalPrefix[n][n];
+    int rightDiagonalSuffix[n][n];
+    memset(rightDiagonalPrefix, 0, sizeof(rightDiagonalPrefix));
+    memset(rightDiagonalSuffix, 0, sizeof(rightDiagonalSuffix));
+
+    for (int i = 0; i < n; i++) {
+        int k = i, j = 0;
+        while (k < n && j < n) {
+            if (mat[k][j] == '.') {
+                rightDiagonalPrefix[k][j] = 0;
+            }
+            else {
+                rightDiagonalPrefix[k][j] = ((k >= 1 && j >= 1) ? rightDiagonalPrefix[k - 1][j - 1] : 0) + (mat[k][j] == 'X');
+            }
+            k++, j++;
+        }
+        --k, --j;
+        int mx = 0;
+        while (k >= 0 && j >= 0) {
+            if (mat[k][j] == '.') {
+                rightDiagonalSuffix[k][j] = 0;
+                mx = 0;
+            }
+            else {
+                rightDiagonalSuffix[k][j] = mx;
+                mx++;
+            }
+            --k, --j;
+        }
+
+        k = 0, j = i;
+        while (k < n && j < n) {
+            if (mat[k][j] == '.') {
+                rightDiagonalPrefix[k][j] = 0;
+            }
+            else {
+                rightDiagonalPrefix[k][j] = ((k >= 1 && j >= 1) ? rightDiagonalPrefix[k - 1][j - 1] : 0) + (mat[k][j] == 'X');
+            }
+            k++, j++;
+        }
+
+        --k, --j;
+        mx = 0;
+        while (k >= 0 && j >= 0) {
+            if (mat[k][j] == '.') {
+                rightDiagonalSuffix[k][j] = 0;
+                mx = 0;
+            }
+            else {
+                rightDiagonalSuffix[k][j] = mx;
+                mx++;
+            }
+            --  k, --j;
+        }
+    }
+
+    int leftDiagonalPrefix[n][n];
+    int leftDiagonalSuffix[n][n];
+    memset(leftDiagonalPrefix, 0, sizeof(leftDiagonalPrefix));
+    memset(leftDiagonalSuffix, 0, sizeof(leftDiagonalSuffix));
+
+    for (int i = 0; i < n; i++) {
+        int k = i, j = n - 1;
+        while (k < n && j >= 0) {
+            if (mat[k][j] == '.') {
+                leftDiagonalPrefix[k][j] = 0;
+            }   
+            else {
+                leftDiagonalPrefix[k][j] = ((k >= 1 && j + 1 < n) ? leftDiagonalPrefix[k - 1][j + 1] : 0) + (mat[k][j] == 'X');
+            }   
+            k++, j--;
+        }
+        --k, ++j;
+        int mx = 0;
+        while (k >= 0 && j < n) {
+            if (mat[k][j] == '.') {
+                leftDiagonalSuffix[k][j] = 0;
+                mx = 0;
+            }   
+            else {
+                leftDiagonalSuffix[k][j] = mx;
+                mx++;
+            }   
+            --k, ++j;
+        }
+    
+        k = 0, j = i;
+        while (k < n && j >= 0) {
+            if (mat[k][j] == '.') {
+                leftDiagonalPrefix[k][j] = 0;
+            }   
+            else {
+                leftDiagonalPrefix[k][j] = ((k >= 1 && j + 1 < n) ? leftDiagonalPrefix[k - 1][j + 1] : 0) + (mat[k][j] == 'X');
+            }   
+            k++, j--;
+        }
+    
+        --k, ++j;
+        mx = 0;
+        while (k >= 0 && j < n) {
+            if (mat[k][j] == '.') {
+                leftDiagonalSuffix[k][j] = 0;
+                mx = 0;
+            }   
+            else {
+                leftDiagonalSuffix[k][j] = mx;
+                mx++;
+            }   
+            --k, ++j;
+        }
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        for (int j = 0; j < n; ++j)
+        {
+            int mx = max({
+                horizontalPrefix[i][j] + horizontalSuffix[i][j],
+                verticalPrefix[i][j] + verticalSuffix[i][j],
+                rightDiagonalPrefix[i][j] + rightDiagonalSuffix[i][j],
+                leftDiagonalPrefix[i][j] + leftDiagonalSuffix[i][j]
+            });
+            cout << mx << ' ';
+        }
+        cout << "\n";
+    }
+}
+
+int32_t main()
+{   
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    solve();
+
+    return 0;
+}   
