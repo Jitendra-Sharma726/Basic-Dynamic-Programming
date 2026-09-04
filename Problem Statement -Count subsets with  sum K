@@ -1,0 +1,149 @@
+# Count Subsets with Sum K
+
+## Problem
+
+Given an array of integers and a target value `K`, find the number of **different subsets** whose sum is exactly `K`.
+
+### Rules
+
+* Each element can be used **at most once**.
+* You can either **include or exclude** each element.
+* If duplicate values exist, choosing elements from different positions creates different subsets.
+* Return the answer modulo `10^9 + 7`.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+1
+5 7
+1 2 3 4 5
+```
+
+### Output
+
+```text
+3
+```
+
+### Explanation
+
+The valid subsets are:
+
+```text
+[2, 5]
+[3, 4]
+[1, 2, 4]
+```
+
+So the answer is `3`.
+
+---
+
+## Example 2
+
+### Input
+
+```text
+1
+4 6
+3 3 3 3
+```
+
+### Output
+
+```text
+6
+```
+
+### Explanation
+
+We need two `3`s to get a sum of `6`.
+
+There are 4 elements, so we can choose any 2:
+
+```text
+C(4, 2) = 6
+```
+
+Therefore, the answer is `6`.
+
+---
+
+## Approach
+
+This is a **0/1 Dynamic Programming** problem.
+
+Let:
+
+```text
+dp[s] = number of subsets with sum exactly s
+```
+
+### Initialization
+
+There is exactly one way to make sum `0`:
+
+```text
+dp[0] = 1
+```
+
+All other values start as `0`.
+
+### For each element
+
+For every number `x` in the array:
+
+```text
+dp[s] += dp[s - x]
+```
+
+We process `s` from `K` down to `x`.
+
+The backward iteration is important because each element can be used **only once**.
+
+---
+
+## DP Formula
+
+For every element `x`:
+
+```text
+dp[s] = dp[s] + dp[s - x]
+```
+
+Where:
+
+* `dp[s]` → don't choose `x`
+* `dp[s - x]` → choose `x`
+
+Take the result modulo:
+
+```text
+10^9 + 7
+```
+
+---
+
+## Complexity
+
+* **Time:** `O(N × K)`
+* **Space:** `O(K)`
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ N ≤ 100`
+* `1 ≤ arr[i] ≤ 10³`
+* `1 ≤ K ≤ 10³`
+
+---
+
+## Key Idea
+
+> Use **0/1 subset-sum DP** and iterate the target sum **backwards** so that every array element is counted at most once.
