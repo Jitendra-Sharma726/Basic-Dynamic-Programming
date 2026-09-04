@@ -1,0 +1,143 @@
+# Chef Counts Unique Paths
+
+Chef has a robot placed on a grid of size `rowCount × columnCount`.
+
+The robot starts at the **top-left corner** and wants to reach the **bottom-right corner**.
+
+The robot can only move:
+
+* ➡️ **Right** — one cell
+* ⬇️ **Down** — one cell
+
+Find the **total number of unique paths** from the start to the destination.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+3
+1 1
+2 2
+10 10
+```
+
+### Output
+
+```text
+1
+2
+48620
+```
+
+### Explanation
+
+* `1 × 1` → Only one cell, so there is **1 path**.
+* `2 × 2` → The robot can move `Right → Down` or `Down → Right` → **2 paths**.
+* `10 × 10` → Total paths = `C(18, 9)` = **48620**.
+
+---
+
+## Example 2
+
+### Input
+
+```text
+4
+5 5
+3 4
+4 3
+7 8
+```
+
+### Output
+
+```text
+70
+10
+10
+1716
+```
+
+---
+
+## Approach
+
+This can be solved using **Dynamic Programming**.
+
+Let:
+
+```text
+dp[i][j] = number of ways to reach cell (i, j)
+```
+
+To reach `(i, j)`, the robot can come from:
+
+* The cell **above** → `(i-1, j)`
+* The cell **left** → `(i, j-1)`
+
+Therefore:
+
+```text
+dp[i][j] = dp[i-1][j] + dp[i][j-1]
+```
+
+### Base Case
+
+The first row and first column have only **one possible path**:
+
+```text
+dp[i][0] = 1
+dp[0][j] = 1
+```
+
+The final answer is:
+
+```text
+dp[rowCount - 1][columnCount - 1]
+```
+
+### Mathematical Formula
+
+The robot always makes:
+
+```text
+(rowCount - 1) Down moves
+(columnCount - 1) Right moves
+```
+
+So the answer can also be calculated using combinations:
+
+```text
+C(rowCount + columnCount - 2, rowCount - 1)
+```
+
+---
+
+## Complexity
+
+### Dynamic Programming
+
+* **Time:** `O(rowCount × columnCount)`
+* **Space:** `O(rowCount × columnCount)`
+
+Space can be optimized to:
+
+* **O(columnCount)**
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 100`
+* `1 ≤ rowCount, columnCount ≤ 100`
+* `rowCount × columnCount ≤ 300`
+* Answer ≤ `2 × 10⁹`
+
+## Key Idea
+
+> At every cell, the number of paths is the sum of the paths from the **top** and **left** cells.
+
+This is a classic **Grid Dynamic Programming** problem.
