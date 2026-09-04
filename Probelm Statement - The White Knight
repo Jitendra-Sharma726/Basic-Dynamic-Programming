@@ -1,0 +1,125 @@
+# The White Knight
+
+## Problem
+
+You are given an `N × N` chessboard containing:
+
+* `.` → Empty cell
+* `K` → White Knight
+* `P` → Black Pawn
+
+There is exactly **one knight** on the board.
+
+The knight moves like a normal chess knight, but it can **only move towards the right side** of the board.
+
+The journey ends when the knight reaches the **rightmost column**.
+
+### Goal
+
+Find the **maximum number of black pawns** the knight can capture.
+
+---
+
+## Example
+
+### Input
+
+```text
+1
+5
+K....
+..P..
+.P...
+...P.
+.....
+```
+
+### Output
+
+```text
+2
+```
+
+### Explanation
+
+The knight starts at the top-left corner.
+
+It can move to the right using valid knight moves and capture **2 pawns**.
+
+Therefore, the maximum number of captured pawns is:
+
+```text
+2
+```
+
+---
+
+## Approach
+
+This is a **Dynamic Programming** problem.
+
+Let:
+
+```text
+dp[i][j] = maximum pawns the knight can capture
+           when it reaches cell (i, j)
+```
+
+From each cell, the knight can make only knight moves that go **to the right**.
+
+Possible moves are:
+
+```text
+(row - 2, col + 1)
+(row + 2, col + 1)
+(row - 1, col + 2)
+(row + 1, col + 2)
+```
+
+Only moves that stay inside the board are allowed.
+
+If the destination cell contains a pawn, add `1`.
+
+```text
+dp[nextRow][nextCol] =
+    max(dp[nextRow][nextCol],
+        dp[row][col] + (board[nextRow][nextCol] == 'P'))
+```
+
+Finally, take the maximum `dp` value among cells in the **rightmost column**.
+
+---
+
+## DP Idea
+
+For every reachable position:
+
+1. Check all valid right-moving knight moves.
+2. Move to the next position.
+3. Add `1` if that cell contains a pawn.
+4. Keep the maximum value for each cell.
+5. The answer is the maximum value in the last column.
+
+---
+
+## Complexity
+
+For each cell, we check at most **4 moves**.
+
+* **Time:** `O(N²)`
+* **Space:** `O(N²)`
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `4 ≤ N ≤ 1000`
+* Board contains exactly one `K`
+* Cells contain only `.`, `K`, or `P`
+
+---
+
+## Key Idea
+
+> Use DP to find the maximum number of pawns that can be collected while moving the knight only towards the right.
