@@ -1,0 +1,137 @@
+# Magic Rankings
+
+Cyael is performing in a room represented by an **N × N grid**.
+
+Each cell contains a judge who gives Cyael some points. The score can be **positive, zero, or negative**.
+
+Cyael must travel from the **top-left cell `(1,1)`** to the **bottom-right cell `(N,N)`**.
+
+She can only move:
+
+* **Right:** `(r, c) → (r, c+1)`
+* **Down:** `(r, c) → (r+1, c)`
+
+The starting and ending cells have no judges.
+
+Cyael wants to choose a path that gives her the **maximum average score** from all judges she visits.
+
+If the maximum possible average is negative, print:
+
+```text
+Bad Judges
+```
+
+Otherwise, print the maximum average with an error of at most `10⁻⁶`.
+
+---
+
+## Example
+
+### Input
+
+```text
+2
+2
+0 -4
+8 0
+2
+0 -45
+-3 0
+```
+
+### Output
+
+```text
+8.000000
+Bad Judges
+```
+
+### Explanation
+
+For the first test case, the best path is:
+
+```text
+(1,1) → (2,1) → (2,2)
+```
+
+Cyael visits one judge and gets `8` points.
+
+Average:
+
+```text
+8 / 1 = 8
+```
+
+For the second test case, every possible path gives a **negative average**, so the answer is:
+
+```text
+Bad Judges
+```
+
+---
+
+## Approach
+
+This is a **Dynamic Programming + Maximum Average Path** problem.
+
+For a chosen average `X`, we can transform every judge score:
+
+```text
+newScore = score - X
+```
+
+Then find the maximum path sum using DP.
+
+If the maximum transformed path sum is:
+
+* `>= 0` → average `X` is achievable.
+* `< 0` → average `X` is not achievable.
+
+Use **binary search** on the possible average value to find the maximum answer accurately.
+
+### DP Transition
+
+For each cell:
+
+```text
+dp[i][j] = score[i][j] - X
+           + max(dp[i-1][j], dp[i][j-1])
+```
+
+The starting cell is:
+
+```text
+dp[0][0] = 0
+```
+
+Finally, check whether `dp[N-1][N-1] >= 0`.
+
+---
+
+## Complexity
+
+For each binary-search iteration:
+
+* **Time:** `O(N²)`
+* **Space:** `O(N²)` or `O(N)` with optimization.
+
+With binary search:
+
+```text
+O(N² × log(precision))
+```
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 20`
+* `2 ≤ N ≤ 100`
+* `-2500 ≤ S[i][j] ≤ 2500`
+* `S[1][1] = S[N][N] = 0`
+
+## Key Idea
+
+> **Binary Search the answer and use Dynamic Programming to check whether a particular average is possible.**
+
+If the best possible average is negative, print **`Bad Judges`**.
