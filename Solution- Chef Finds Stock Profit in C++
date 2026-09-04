@@ -1,0 +1,19 @@
+int calculateMaxProfit(vector<int>& stockPrices) {
+
+    int minPrice = INT_MAX;
+    int maxProfit = 0;
+
+    for (int price : stockPrices) {
+
+        // Update minimum buying price
+        minPrice = min(minPrice, price);
+
+        // Calculate profit if sold today
+        int profit = price - minPrice;
+
+        // Update maximum profit
+        maxProfit = max(maxProfit, profit);
+    }
+
+    return maxProfit;
+}
