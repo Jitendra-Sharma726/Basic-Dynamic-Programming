@@ -1,0 +1,117 @@
+# Chef Solves Climbing Stairs
+
+Chef needs to climb a staircase with `N` steps.
+
+At each move, he can climb either:
+
+* **1 step**
+* **2 steps**
+
+Find the **total number of different ways** Chef can reach the top.
+
+The order of the moves matters.
+
+For example, for `N = 3`:
+
+```text
+1 + 1 + 1
+1 + 2
+2 + 1
+```
+
+So there are **3 ways**.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+4
+1
+4
+10
+20
+```
+
+### Output
+
+```text
+1
+5
+89
+10946
+```
+
+### Explanation
+
+* `N = 1` → `1` way
+* `N = 4` → `5` ways
+* `N = 10` → `89` ways
+* `N = 20` → `10946` ways
+
+---
+
+## Approach
+
+Use **Dynamic Programming**.
+
+Let:
+
+```text
+dp[i] = number of ways to reach step i
+```
+
+To reach step `i`, Chef can:
+
+* Come from step `i - 1` by taking **1 step**
+* Come from step `i - 2` by taking **2 steps**
+
+Therefore:
+
+```text
+dp[i] = dp[i - 1] + dp[i - 2]
+```
+
+### Base Cases
+
+```text
+dp[1] = 1
+dp[2] = 2
+```
+
+Then calculate the remaining values iteratively.
+
+For example:
+
+```text
+dp[1] = 1
+dp[2] = 2
+dp[3] = 3
+dp[4] = 5
+dp[5] = 8
+```
+
+This follows the **Fibonacci sequence**.
+
+---
+
+## Complexity
+
+* **Time:** `O(N)`
+* **Space:** `O(N)`
+* Can be optimized to **O(1)** space.
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ N ≤ 45`
+
+## Key Idea
+
+> The number of ways to reach a step is the sum of the ways to reach the previous **two steps**.
+
+This is a classic **1D Dynamic Programming** problem.
