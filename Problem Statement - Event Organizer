@@ -1,0 +1,72 @@
+# Event Organizer
+
+Chef has several events during a 48-hour weekend.
+
+Each event has:
+
+- `S` - Start time
+- `E` - End time
+- `C` - Compensation
+
+Chef can choose multiple events, but selected events must not overlap.
+
+If one event ends exactly when another starts, both events can be selected.
+
+## Goal
+
+Find the maximum total compensation Chef can earn.
+
+## Example
+
+Events:
+
+1 2 100
+2 3 200
+3 4 1600
+1 3 2100
+
+Best choice:
+
+1 3 2100
+3 4 1600
+
+Total:
+
+2100 + 1600 = 3700
+
+Output:
+
+3700
+
+## Approach
+
+This is a Weighted Interval Scheduling problem.
+
+1. Sort events by their ending time.
+2. For each event, choose between:
+   - Skipping the event.
+   - Taking the event and adding its compensation to the best compatible event.
+3. Store the results using Dynamic Programming.
+
+Formula:
+
+dp[i] = max(
+    dp[i-1],
+    compensation[i] + dp[previous]
+)
+
+An event is compatible when:
+
+previous_end <= current_start
+
+## Complexity
+
+Time: O(N log N)
+Space: O(N)
+
+## Constraints
+
+- 1 <= T <= 10
+- 1 <= N <= 2000
+- 0 <= S < E <= 48
+- 0 <= C <= 10^6
