@@ -1,0 +1,179 @@
+# Chef Counts Unique Paths
+
+## Problem
+
+You are given a grid containing:
+
+* `0` → Free cell
+* `1` → Obstacle
+
+A robot starts at the **top-left** cell and needs to reach the **bottom-right** cell.
+
+The robot can move only:
+
+* **Right**
+* **Down**
+
+The robot cannot move through obstacle cells.
+
+Your task is to count the **number of unique valid paths** from the start to the destination.
+
+If the start or destination is blocked, or no valid path exists, return `0`.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+2
+3
+0 0 1
+0 0 0
+1 0 0
+
+4
+0 1 0 0
+0 0 1 0
+1 0 0 0
+0 0 0 0
+```
+
+### Output
+
+```text
+4
+3
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+1
+2
+0 0
+0 0
+```
+
+### Output
+
+```text
+2
+```
+
+There are two possible paths:
+
+```text
+Right → Down
+Down → Right
+```
+
+---
+
+## Example 3
+
+### Input
+
+```text
+1
+5
+0 0 0 0 0
+0 1 1 1 0
+0 1 0 1 0
+0 1 0 0 0
+0 0 0 1 0
+```
+
+### Output
+
+```text
+1
+```
+
+Only one valid path can reach the destination without crossing an obstacle.
+
+---
+
+## Approach
+
+This is a **Dynamic Programming** problem.
+
+Let:
+
+```text
+dp[i][j]
+```
+
+represent the number of valid ways to reach cell `(i, j)`.
+
+### Rules
+
+If the current cell is an obstacle:
+
+```text
+grid[i][j] == 1
+```
+
+then:
+
+```text
+dp[i][j] = 0
+```
+
+Otherwise, the robot can arrive from:
+
+* The cell above `(i-1, j)`
+* The cell on the left `(i, j-1)`
+
+Therefore:
+
+```text
+dp[i][j] = dp[i-1][j] + dp[i][j-1]
+```
+
+### Base Case
+
+For the starting cell:
+
+```text
+dp[0][0] = 1
+```
+
+if it is not an obstacle.
+
+The answer is:
+
+```text
+dp[n-1][m-1]
+```
+
+---
+
+## Complexity
+
+* **Time:** `O(n × m)`
+* **Space:** `O(n × m)`
+
+The space can be optimized to `O(m)` using a 1D DP array.
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 100`
+* `1 ≤ rows ≤ 100`
+* Each grid cell is either `0` or `1`
+* `rows × columns ≤ 300`
+* Grid does not have to be square
+* Answer ≤ `2 × 10⁹`
+
+---
+
+## Key Idea
+
+> **If a cell is free, the number of ways to reach it is the sum of the ways to reach the cell above and the cell to the left. If it is blocked, the number of ways is `0`.**
