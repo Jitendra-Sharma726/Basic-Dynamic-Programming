@@ -1,0 +1,222 @@
+# Ninja Training
+
+## Problem Statement
+
+A ninja has to train for `n` days. On each day, he must choose **exactly one** of these activities:
+
+1. Running
+2. Stealth Training
+3. Combat Practice
+
+The ninja **cannot choose the same activity on two consecutive days**.
+
+For each day, you are given the merit points earned from each activity.
+
+Your task is to find the **maximum total merit points** the ninja can earn over all `n` days.
+
+---
+
+## Input Format
+
+The first line contains an integer `T`, the number of test cases.
+
+For each test case:
+
+* The first line contains an integer `n`, the number of days.
+* The next `n` lines contain three integers:
+
+```text
+running stealth combat
+```
+
+where:
+
+* `running` = points for Running
+* `stealth` = points for Stealth Training
+* `combat` = points for Combat Practice
+
+---
+
+## Output Format
+
+For each test case, print the maximum total merit points the ninja can earn.
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ n ≤ 10⁴`
+* `0 ≤ matrix[i][j] ≤ 1000`
+
+---
+
+## Example 1
+
+### Input
+
+```text
+2
+3
+5 100 20
+50 10 90
+40 60 80
+4
+20 30 25
+50 10 60
+15 90 40
+80 20 30
+```
+
+### Output
+
+```text
+250
+260
+```
+
+### Explanation
+
+For the first test case:
+
+```text
+Day 1 → Stealth       = 100
+Day 2 → Combat        = 90
+Day 3 → Stealth       = 60
+```
+
+Total:
+
+```text
+100 + 90 + 60 = 250
+```
+
+For the second test case:
+
+```text
+Day 1 → Stealth       = 30
+Day 2 → Combat        = 60
+Day 3 → Stealth       = 90
+Day 4 → Running       = 80
+```
+
+Total:
+
+```text
+30 + 60 + 90 + 80 = 260
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+1
+3
+10 5 20
+20 50 10
+30 25 40
+```
+
+### Output
+
+```text
+110
+```
+
+### Explanation
+
+The best choices are:
+
+```text
+Day 1 → Combat = 20
+Day 2 → Stealth = 50
+Day 3 → Combat = 40
+```
+
+Total:
+
+```text
+20 + 50 + 40 = 110
+```
+
+---
+
+## Approach
+
+This is a **Dynamic Programming** problem.
+
+Let:
+
+```text
+dp[i][0] = maximum points up to day i if Running is chosen
+dp[i][1] = maximum points up to day i if Stealth is chosen
+dp[i][2] = maximum points up to day i if Combat is chosen
+```
+
+Since the same activity cannot be selected on consecutive days:
+
+```text
+dp[i][0] = points[i][0] + max(dp[i-1][1], dp[i-1][2])
+
+dp[i][1] = points[i][1] + max(dp[i-1][0], dp[i-1][2])
+
+dp[i][2] = points[i][2] + max(dp[i-1][0], dp[i-1][1])
+```
+
+The answer is:
+
+```text
+max(dp[n-1][0], dp[n-1][1], dp[n-1][2])
+```
+
+### Complexity
+
+**Time:** `O(n)`
+
+**Space:** `O(1)` if we keep only the previous day's values.
+
+---
+
+## Python Solution
+
+```python
+def maxTrainingMerits(n, matrix):
+    # Maximum points for the previous day
+    running = matrix[0][0]
+    stealth = matrix[0][1]
+    combat = matrix[0][2]
+
+    for i in range(1, n):
+        new_running = matrix[i][0] + max(stealth, combat)
+        new_stealth = matrix[i][1] + max(running, combat)
+        new_combat = matrix[i][2] + max(running, stealth)
+
+        running = new_running
+        stealth = new_stealth
+        combat = new_combat
+
+    return max(running, stealth, combat)
+
+
+# Input
+T = int(input())
+
+for _ in range(T):
+    n = int(input())
+
+    matrix = []
+
+    for _ in range(n):
+        matrix.append(list(map(int, input().split())))
+
+    print(maxTrainingMerits(n, matrix))
+```
+
+## Key Idea
+
+At every day, choose the activity with the best possible previous score **without repeating yesterday's activity**.
+
+This reduces the problem from trying all possible activity combinations to a simple `O(n)` dynamic programming solution.
