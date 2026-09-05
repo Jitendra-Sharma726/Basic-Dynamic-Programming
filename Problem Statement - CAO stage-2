@@ -1,0 +1,236 @@
+# CAO Stage-2
+
+## Problem
+
+You are given a **2D grid** containing two types of cells:
+
+* `#` → Wall
+* `^` → Empty cell
+
+A non-wall cell can contain a monster if it is the **Centre of Prime-Cross (CPC)**.
+
+For every cell `X`, calculate the number of consecutive `^` cells in four directions:
+
+* `L` → Left
+* `R` → Right
+* `T` → Top
+* `B` → Bottom
+
+The cell `X` itself is **not counted**.
+
+A cell is a **CPC** if:
+
+```text
+min(L, R, T, B) >= P
+```
+
+for at least one **prime number `P`**.
+
+The CPC can accommodate as many monsters as the **number of prime numbers** less than or equal to:
+
+```text
+min(L, R, T, B)
+```
+
+Your task is to find the **total number of monsters** the entire grid can accommodate.
+
+---
+
+## Example
+
+### Input
+
+```text
+2
+
+3 10
+#^^^^^#^##
+^^^^^^^^^^
+^^^^^^^^^#
+
+7 10
+^^^^#^^^^#
+^^^^^^^^#^
+^^##^^#^^^
+#^^^^^^^#^
+^^#^^^^^^^
+^^^^#^^^^^
+^^^^^^^^^^
+```
+
+### Output
+
+```text
+0
+3
+```
+
+---
+
+## Explanation
+
+For every non-wall cell:
+
+1. Count consecutive `^` cells in the four directions.
+2. Find:
+
+```text
+K = min(L, R, T, B)
+```
+
+3. Count how many prime numbers are `<= K`.
+4. Add this count to the answer.
+
+For example, if:
+
+```text
+K = 5
+```
+
+the primes are:
+
+```text
+2, 3, 5
+```
+
+So this CPC can accommodate:
+
+```text
+3 monsters
+```
+
+---
+
+## Approach
+
+This problem can be solved efficiently using **Dynamic Programming**.
+
+Instead of checking every direction by scanning repeatedly, precompute the number of consecutive `^` cells in each direction.
+
+### 1. Left
+
+For each cell, store the number of consecutive `^` cells immediately to its left.
+
+```text
+left[i][j] = left[i][j-1] + 1
+```
+
+if the current cell is not a wall.
+
+### 2. Right
+
+Process the grid from right to left:
+
+```text
+right[i][j] = right[i][j+1] + 1
+```
+
+### 3. Top
+
+Process from top to bottom:
+
+```text
+top[i][j] = top[i-1][j] + 1
+```
+
+### 4. Bottom
+
+Process from bottom to top:
+
+```text
+bottom[i][j] = bottom[i+1][j] + 1
+```
+
+---
+
+## Find CPC
+
+For every `^` cell:
+
+```text
+K = min(left[i][j],
+        right[i][j],
+        top[i][j],
+        bottom[i][j])
+```
+
+Then count the number of primes `<= K`.
+
+Add that count to the total answer.
+
+---
+
+## Prime Numbers
+
+Since the maximum possible value of `K` is limited by the grid size, we can precompute prime numbers using the **Sieve of Eratosthenes**.
+
+We can also create:
+
+```text
+primeCount[x]
+```
+
+where `primeCount[x]` represents the number of primes `<= x`.
+
+Then the number of monsters for a cell is simply:
+
+```text
+primeCount[K]
+```
+
+This avoids checking prime numbers separately for every cell.
+
+---
+
+## Complexity
+
+Let the grid size be `R × C`.
+
+### Time
+
+```text
+O(R × C + M log log M)
+```
+
+where `M = min(R, C)` for the prime preprocessing range.
+
+The grid processing itself is:
+
+```text
+O(R × C)
+```
+
+### Space
+
+```text
+O(R × C)
+```
+
+for the four DP arrays.
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 100`
+* `1 ≤ R ≤ 500`
+* `1 ≤ C ≤ 500`
+
+---
+
+## Key Idea
+
+> **Precompute consecutive `^` cells in all four directions using DP. For each cell, take the minimum of the four values and add the number of primes up to that minimum.**
+
+```text
+For every cell:
+
+    L = consecutive ^ on left
+    R = consecutive ^ on right
+    T = consecutive ^ on top
+    B = consecutive ^ on bottom
+
+    K = min(L, R, T, B)
+
+    monsters += number of primes <= K
+```
