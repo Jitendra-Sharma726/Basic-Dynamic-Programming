@@ -1,0 +1,243 @@
+
+# Maximizing LCS
+
+## Problem
+
+Alice and Bob play a game using a string `S`.
+
+Initially, both have an empty string.
+
+They take turns:
+
+### Alice's Turn
+
+Alice:
+
+1. Takes a **prefix** of `S`.
+2. Removes it from `S`.
+3. Adds it to the end of her string.
+
+### Bob's Turn
+
+Bob:
+
+1. Takes a **suffix** of the remaining `S`.
+2. Reverses it.
+3. Adds it to the end of his string.
+
+The game continues until the original string is divided between Alice and Bob.
+
+### Goal
+
+Find the **maximum possible length of the Longest Common Subsequence (LCS)** between Alice's and Bob's final strings.
+
+---
+
+## Example
+
+### Input
+
+```text
+3
+4
+abab
+6
+abccda
+4
+aaaa
+```
+
+### Output
+
+```text
+1
+2
+2
+```
+
+---
+
+## Explanation
+
+### Test Case 1
+
+```text
+S = "abab"
+```
+
+Alice takes:
+
+```text
+"ab"
+```
+
+Alice's string:
+
+```text
+"ab"
+```
+
+Remaining string:
+
+```text
+"ab"
+```
+
+Bob takes `"ab"` and reverses it:
+
+```text
+"ba"
+```
+
+So:
+
+```text
+Alice = "ab"
+Bob   = "ba"
+```
+
+Their LCS has length:
+
+```text
+1
+```
+
+---
+
+### Test Case 2
+
+```text
+S = "abccda"
+```
+
+Alice takes:
+
+```text
+"abc"
+```
+
+Bob gets the remaining:
+
+```text
+"cda"
+```
+
+After reversing:
+
+```text
+"adc"
+```
+
+So:
+
+```text
+Alice = "abc"
+Bob   = "adc"
+```
+
+The LCS length is:
+
+```text
+2
+```
+
+---
+
+### Test Case 3
+
+```text
+S = "aaaa"
+```
+
+Alice gets:
+
+```text
+"aa"
+```
+
+Bob gets the remaining `"aa"` and reversing does not change it.
+
+```text
+Alice = "aa"
+Bob   = "aa"
+```
+
+Therefore, the LCS length is:
+
+```text
+2
+```
+
+---
+
+## Key Idea
+
+The important observation is that Alice takes a **prefix** and Bob takes the remaining **suffix**.
+
+If Alice takes the first `i` characters, Bob gets the remaining characters in reverse order.
+
+So for every possible split:
+
+```text
+S = S[0...i-1] + S[i...N-1]
+```
+
+we need to find:
+
+```text
+LCS(
+    S[0...i-1],
+    reverse(S[i...N-1])
+)
+```
+
+The answer is the maximum LCS over all possible split positions.
+
+---
+
+## Approach
+
+1. Try every possible split position.
+2. Consider the left part as Alice's string.
+3. Reverse the right part for Bob's string.
+4. Calculate the LCS of the two strings.
+5. Keep the maximum LCS length.
+
+A standard LCS DP can be used:
+
+```text
+if A[i] == B[j]:
+    dp[i][j] = dp[i-1][j-1] + 1
+else:
+    dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+```
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 1000`
+* `1 ≤ N ≤ 5000`
+* Sum of `N` over all test cases ≤ `5000`
+
+Fast I/O is recommended, especially for Python submissions.
+
+---
+
+## Complexity
+
+A straightforward solution that calculates LCS for every split can be expensive.
+
+The intended solution should optimize the repeated LCS calculations to handle:
+
+```text
+N ≤ 5000
+```
+
+with the total `N` across test cases also limited to `5000`.
+
+---
+
+## Key Takeaway
+
+> Try different prefix/suffix splits and maximize the LCS between Alice's prefix and the reversed suffix given to Bob.
