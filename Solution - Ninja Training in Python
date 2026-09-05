@@ -1,0 +1,60 @@
+import sys
+
+def maxTrainingMerits(n, matrix):
+    # If there are no days, total merits is 0
+    if n == 0:
+        return 0
+        
+    # Track maximum points for (Running, Stealth, Combat)
+    # Initialize with the 1st day's points
+    prev_running = matrix[0][0]
+    prev_stealth = matrix[0][1]
+    prev_combat  = matrix[0][2]
+    
+    # Iterate through all subsequent days
+    for i in range(1, n):
+        # Calculate maximum possible points for choosing each activity today
+        curr_running = matrix[i][0] + max(prev_stealth, prev_combat)
+        curr_stealth = matrix[i][1] + max(prev_running, prev_combat)
+        curr_combat  = matrix[i][2] + max(prev_running, prev_stealth)
+        
+        # Roll forward the values for the next iteration
+        prev_running = curr_running
+        prev_stealth = curr_stealth
+        prev_combat  = curr_combat
+        
+    # The answer is the maximum achievable total at the final day
+    return max(prev_running, prev_stealth, prev_combat)
+
+def solve():
+    # Read all input from standard input efficiently
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+        
+    iterator = iter(input_data)
+    
+    # Read number of test cases
+    t = int(next(iterator))
+    
+    out = []
+    for _ in range(t):
+        n = int(next(iterator))
+        
+        # Parse the n x 3 matrix
+        matrix = []
+        for _ in range(n):
+            r = int(next(iterator))
+            s = int(next(iterator))
+            c = int(next(iterator))
+            matrix.append([r, s, c])
+            
+        # Compute the result for this test case
+        result = maxTrainingMerits(n, matrix)
+        out.append(str(result))
+        
+    # Print results separated by newlines
+    sys.stdout.write('\n'.join(out) + '\n')
+
+if __name__ == '__main__':
+    solve()
