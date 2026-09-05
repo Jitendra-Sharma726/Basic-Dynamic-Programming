@@ -1,0 +1,149 @@
+# Dish Distribution
+
+## Problem Statement
+
+Chef has `m` cooks and needs to prepare exactly `n` dishes.
+
+Each cook `i` has a minimum and maximum number of dishes they can prepare:
+
+* At least `xᵢ` dishes
+* At most `yᵢ` dishes
+
+Chef wants to distribute **exactly `n` dishes** among all cooks while respecting these limits.
+
+Your task is to find the **number of valid ways** to distribute the dishes.
+
+Since the answer can be very large, return it modulo:
+
+```text
+1,000,000,007
+```
+
+---
+
+## Input Format
+
+The first line contains an integer `T`, the number of test cases.
+
+For each test case:
+
+* The first line contains two integers `n` and `m`:
+
+  * `n` = total number of dishes
+  * `m` = number of cooks
+* The next `m` lines contain two integers `xᵢ` and `yᵢ`:
+
+```text
+xᵢ yᵢ
+```
+
+where:
+
+* `xᵢ` = minimum dishes for cook `i`
+* `yᵢ` = maximum dishes for cook `i`
+
+---
+
+## Output Format
+
+For each test case, print the number of valid distributions modulo:
+
+```text
+1,000,000,007
+```
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 50`
+* `1 ≤ n, m ≤ 100`
+* `0 ≤ xᵢ, yᵢ ≤ 100`
+
+---
+
+## Example
+
+### Input
+
+```text
+1
+3 2
+0 3
+1 3
+```
+
+### Output
+
+```text
+3
+```
+
+### Explanation
+
+There are `3` valid ways to distribute `3` dishes among `2` cooks:
+
+```text
+Cook 1 = 0, Cook 2 = 3
+Cook 1 = 1, Cook 2 = 2
+Cook 1 = 2, Cook 2 = 1
+```
+
+All of these satisfy the minimum and maximum limits.
+
+---
+
+## Dynamic Programming Approach
+
+Define:
+
+```text
+dp[j] = number of ways to distribute exactly j dishes
+```
+
+Initially:
+
+```text
+dp[0] = 1
+```
+
+For each cook, try assigning between `xᵢ` and `yᵢ` dishes to that cook.
+
+The transition is:
+
+```text
+new_dp[j] = Σ dp[j - k]
+```
+
+for:
+
+```text
+xᵢ ≤ k ≤ yᵢ
+```
+
+We only need to consider totals up to `n`.
+
+To make the transition efficient, we can use **prefix sums** instead of checking every possible `k`.
+
+---
+
+## Complexity
+
+Using prefix sums:
+
+* **Time:** `O(n × m)`
+* **Space:** `O(n)`
+
+---
+
+## Key Idea
+
+This is a **bounded distribution DP** problem.
+
+For every cook, we decide how many dishes they receive within their allowed range `[xᵢ, yᵢ]`, while keeping track of the total number of dishes assigned so far.
+
+The final answer is:
+
+```text
+dp[n]
+```
