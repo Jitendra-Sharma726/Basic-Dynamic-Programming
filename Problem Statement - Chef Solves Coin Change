@@ -1,0 +1,186 @@
+# Chef Solves Coin Change II
+
+## Problem
+
+You are given a list of **distinct coin denominations** and a target amount.
+
+You can use each type of coin **any number of times**, including zero.
+
+Your task is to find the **number of different combinations** that can make exactly the target amount.
+
+> The order of coins does **not** matter.
+
+If the target amount cannot be formed, return `0`.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+2
+5
+[1, 2, 5]
+3
+[2]
+```
+
+### Output
+
+```text
+4
+0
+```
+
+### Explanation
+
+For target `5` with coins `[1, 2, 5]`, the valid combinations are:
+
+```text
+1 + 1 + 1 + 1 + 1
+1 + 1 + 1 + 2
+1 + 2 + 2
+5
+```
+
+So the answer is:
+
+```text
+4
+```
+
+For target `3` with coin `[2]`, it is impossible to make `3`.
+
+So the answer is:
+
+```text
+0
+```
+
+---
+
+## Example 2
+
+### Input
+
+```text
+2
+10
+[10]
+5
+[5]
+```
+
+### Output
+
+```text
+1
+1
+```
+
+Each target can be formed using exactly one coin.
+
+---
+
+## Approach
+
+This is a **Dynamic Programming (DP)** problem.
+
+Define:
+
+```text
+dp[i] = number of ways to make amount i
+```
+
+### Step 1: Base Case
+
+There is exactly **one way to make amount `0`**:
+
+```text
+dp[0] = 1
+```
+
+This means choosing no coins.
+
+### Step 2: Process Each Coin
+
+For every coin:
+
+```text
+for amount from coin to target:
+    dp[amount] += dp[amount - coin]
+```
+
+We process coins one by one so that different orders of the same coins are **not counted as different combinations**.
+
+For example:
+
+```text
+1 + 2
+2 + 1
+```
+
+are counted as **one combination**.
+
+---
+
+## DP Example
+
+For:
+
+```text
+coins = [1, 2, 5]
+target = 5
+```
+
+The final DP array gives:
+
+```text
+dp[5] = 4
+```
+
+The four combinations are:
+
+```text
+1+1+1+1+1
+1+1+1+2
+1+2+2
+5
+```
+
+---
+
+## Complexity
+
+Let:
+
+* `N` = number of coin denominations
+* `T` = target amount
+
+### Time
+
+```text
+O(N × T)
+```
+
+### Space
+
+```text
+O(T)
+```
+
+---
+
+## Constraints
+
+* `1 ≤ N ≤ 300`
+* `1 ≤ coinDenominations[i] ≤ 5000`
+* All coin denominations are unique
+* `0 ≤ targetAmount ≤ 5000`
+
+---
+
+## Key Idea
+
+> **Use 1D DP where `dp[x]` stores the number of ways to make amount `x`. Process each coin from small to large amounts so each combination is counted once.**
