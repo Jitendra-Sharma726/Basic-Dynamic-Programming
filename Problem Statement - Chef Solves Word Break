@@ -1,0 +1,202 @@
+# Chef Solves Word Break
+
+## Problem
+
+You are given:
+
+* A string `inputString`
+* A list of words `dictionaryWords`
+
+Your task is to check whether the entire string can be split into **one or more dictionary words**.
+
+A dictionary word can be used **multiple times**.
+
+Return:
+
+* `true` if the string can be completely segmented.
+* `false` otherwise.
+
+---
+
+## Example 1
+
+### Input
+
+```text
+2
+catsdo
+["cats", "dog", "sand", "and"]
+
+pineapplepen
+["apple", "pen", "pineapple"]
+```
+
+### Output
+
+```text
+0
+1
+```
+
+### Explanation
+
+#### Test Case 1
+
+```text
+inputString = "catsdo"
+```
+
+Dictionary:
+
+```text
+["cats", "dog", "sand", "and"]
+```
+
+`catsdo` cannot be completely formed using the dictionary words.
+
+So the answer is:
+
+```text
+0
+```
+
+#### Test Case 2
+
+```text
+inputString = "pineapplepen"
+```
+
+It can be split as:
+
+```text
+pineapple + pen
+```
+
+Both words are present in the dictionary.
+
+So the answer is:
+
+```text
+1
+```
+
+---
+
+## Approach
+
+This problem can be solved using **Dynamic Programming**.
+
+Define:
+
+```text
+dp[i] = true
+```
+
+if the first `i` characters of the string can be completely segmented using dictionary words.
+
+### Base Case
+
+An empty string can always be segmented:
+
+```text
+dp[0] = true
+```
+
+### Transition
+
+For every position `i`, check every possible dictionary word.
+
+If a word ends at position `i` and the part before it can also be segmented:
+
+```text
+dp[i - word.length] == true
+```
+
+then:
+
+```text
+dp[i] = true
+```
+
+In simple terms:
+
+> If we can form the beginning of the string and the remaining part is a dictionary word, the whole part can be formed.
+
+---
+
+## DP Example
+
+For:
+
+```text
+inputString = "pineapplepen"
+dictionary = ["apple", "pen", "pineapple"]
+```
+
+We can find:
+
+```text
+pineapple + pen
+```
+
+Therefore:
+
+```text
+dp[length of string] = true
+```
+
+and the answer is:
+
+```text
+1
+```
+
+---
+
+## Complexity
+
+Let:
+
+* `N` = length of the input string
+* `D` = number of dictionary words
+* `L` = maximum dictionary word length
+
+### Time
+
+```text
+O(N × D × L)
+```
+
+### Space
+
+```text
+O(N)
+```
+
+---
+
+## Constraints
+
+* `1 ≤ T ≤ 10`
+* `1 ≤ |inputString| ≤ 300`
+* `1 ≤ |dictionaryWords| ≤ 1000`
+* `1 ≤ |dictionaryWords[i]| ≤ 20`
+* All characters are lowercase English letters.
+* All dictionary words are unique.
+
+---
+
+## Key Idea
+
+> **Use DP to check whether every prefix of the string can be formed using dictionary words.**
+
+```text
+dp[0] = true
+
+For each position:
+    Try every dictionary word
+    If the word matches and the previous part is valid:
+        dp[i] = true
+
+Answer = dp[n]
+```
