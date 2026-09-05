@@ -1,0 +1,100 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+signed main() {
+	// your code goes here
+	
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	
+	vector< int > P ;
+	int isP[1000] = {0};
+	isP[1] = 1 ;
+	isP[0] = 1 ;
+	
+	for( int i = 2 ; i*i < 1000 ; i++ )
+	{
+	    if(isP[i]==0)
+	        for( int j = i*i ; j < 1000 ; j+=i)
+	        isP[j] = 1 ;
+	}
+	
+	
+	for( int i = 2 ; i < 1000 ; i++ )
+	if(isP[i]==0)P.push_back(i);
+	
+	sort( P.begin() , P.end() );
+	
+	int test;
+	cin>>test;
+	
+	auto work = []( const string A )->vector<int>
+	{
+	   vector<int>res( (int)A.size() , 0 );  
+	   
+	   int c = 0 ;
+	   
+	   for( int i = 0 ; i < (int)A.size() ; i++ )
+	   if(A[i]=='^')
+	   res[i] = c++;
+	   else
+	       res[i] = c = 0;
+	   
+	   c = 0;
+	   
+	   for( int i = (int)A.size()-1 ; i>= 0 ; i-- )
+	   {
+	       if(A[i]=='^')
+	       res[i] = min( res[i] , c++ );
+	       else
+	           res[i] = c = 0 ;
+	   }
+	   
+	   return res;
+	};
+	
+
+	while(test--)
+	{
+	   int M , N ;
+	   cin>>M>>N ;
+	   
+	   vector< string > S( M );
+	   
+	   for( auto &x : S )
+	   cin>>x ;
+	   
+	   vector< vector< int > > B( M , vector<int>(N,10000));
+	   
+	   for( int i = 0 ; i < M ; i++ )
+	   {
+	       auto K = work(S[i]);
+	       for( int j = 0 ; j < N ; j++ )
+	       B[i][j] = min( B[i][j] , K[j]);
+	   }
+	   
+	   for( int j = 0 ; j < N ; j++ )
+	   {
+	       string ss;
+	       for( int i = 0 ; i < M ; i++ )
+	       ss += S[i][j] ;
+	       
+	       auto K = work(ss);
+	       for( int i = 0 ; i < M ; i++ )
+	       B[i][j] = min( B[i][j] , K[i] );
+	   }
+	   
+	   int res = 0 ;
+	   
+	   for( int i = 0 ; i < M ; i++ )
+	   for( int j = 0 ; j < N ; j++ )
+	   	if( S[i][j] == '^' && B[i][j] > 1 )
+	   		res += upper_bound(P.begin(),P.end(),B[i][j])-P.begin();
+
+	   cout<<res<<endl;
+	   
+	}
+	
+	return 0;
+}
